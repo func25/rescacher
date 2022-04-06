@@ -4,7 +4,8 @@ import (
 	"time"
 )
 
-var CACHER_LOCK = "cacherlock"
+// functask: create algorithm to cache slowly from 1 to gapTurn, so it will not stress cpu
+
 var emptyStruct = struct{}{}
 
 type turnCacher struct {
@@ -96,6 +97,10 @@ func (t *turnCacher) Start() {
 		}
 	}()
 }
+
+// StartDistributed will not stress cpu but stress i/o maybe
+// func (t *turnCacher) StartDistributed() {
+// }
 
 func (t *turnCacher) GetOrGen(turn int) (interface{}, error) {
 	item, err := t.cacher.Load(turn)
