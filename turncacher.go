@@ -1,4 +1,4 @@
-package gacacher
+package rescacher
 
 import (
 	"time"
@@ -14,7 +14,7 @@ type turnCacher struct {
 
 	// config option
 	gapTurn      int                 // default gap turn is 50
-	gapTime      time.Duration       // default gap time is 1
+	gapTime      time.Duration       // default gap time is 1 second
 	locker       Locker              // locker using for distributed lock
 	fCurrentTurn func() (int, error) // get the current cached turn of cacher KEY
 
@@ -24,7 +24,7 @@ type turnCacher struct {
 	stop bool
 }
 
-func NewTurnCacher[T any](turn int, cacher ICacher, opts ...CacherOption) (*turnCacher, error) {
+func NewTurnCacher(turn int, cacher ICacher, opts ...CacherOption) *turnCacher {
 	turnCacher := &turnCacher{
 		currentTurn:  turn,
 		cacher:       cacher,
@@ -36,14 +36,14 @@ func NewTurnCacher[T any](turn int, cacher ICacher, opts ...CacherOption) (*turn
 	}
 
 	turnCacher.applyOpts(opts...)
-	return turnCacher, nil
+	return turnCacher
 }
 
-func (t *turnCacher) Start(amount int, gapTime time.Duration) {
+func (t *turnCacher) Start() {
 	go func() {
 		failed := 0
 
-		for ; !t.stop; time.Sleep(gapTime) {
+		for ; !t.stop; time.Sleep(t.gapTime) {
 			cacher := t.cacher
 
 			// locking
@@ -59,9 +59,18 @@ func (t *turnCacher) Start(amount int, gapTime time.Duration) {
 				continue
 			}
 
+			cachedTurn, err := t.cacher.GetCachedTurn()
+			if err != nil || cachedTurn-turn >= t.gapTurn {
+				continue
+			}
+
+			if cachedTurn < turn {
+				cachedTurn = turn + 1
+			}
+
 			// generate new turn & save
-			for i := 0; i < amount; i++ {
-				v, err := cacher.Generate(turn)
+			for i := 0; i < t.gapTurn; i++ {
+				v, err := cacher.Generate(cachedTurn)
 
 				if err != nil {
 					failed++
@@ -69,7 +78,15 @@ func (t *turnCacher) Start(amount int, gapTime time.Duration) {
 				}
 
 				failed = 0
-				t.cacher.Save(turn, v)
+				cachedTurn++
+
+				if err := t.cacher.Save(cachedTurn, v); err != nil {
+					break
+				}
+			}
+
+			if err := t.cacher.SetCachedTurn(cachedTurn); err != nil {
+				break
 			}
 
 			// unlocking

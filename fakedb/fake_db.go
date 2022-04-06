@@ -2,18 +2,11 @@ package fakedb
 
 import (
 	"errors"
-	"fmt"
+	"sync"
 )
 
 var database = map[string]interface{}{}
-
-func LoadTurn(turn int) (interface{}, error) {
-	return LoadObject(fmt.Sprintf("TEST_%v", turn))
-}
-
-func StoreTurn(turn int, value interface{}) error {
-	return StoreObject(fmt.Sprintf("TEST_%v", turn), value)
-}
+var mutex sync.Mutex
 
 func LoadObject(key string) (interface{}, error) {
 	if def, ok := database["TEST"]; !ok {
@@ -24,6 +17,8 @@ func LoadObject(key string) (interface{}, error) {
 }
 
 func StoreObject(key string, value interface{}) error {
+	mutex.Lock()
 	database[key] = value
+	mutex.Unlock()
 	return nil
 }
