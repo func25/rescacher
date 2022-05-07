@@ -2,9 +2,9 @@ package rescacher
 
 import "time"
 
-type CacherOption func(*turnCacher)
+type CacherOption func(*TurnCacher)
 
-func (c *turnCacher) applyOpts(opts ...CacherOption) *turnCacher {
+func (c *TurnCacher) applyOpts(opts ...CacherOption) *TurnCacher {
 	for i := range opts {
 		opts[i](c)
 	}
@@ -13,25 +13,37 @@ func (c *turnCacher) applyOpts(opts ...CacherOption) *turnCacher {
 }
 
 func OptGapTurn(gapTurn int) CacherOption {
-	return func(q *turnCacher) {
+	return func(q *TurnCacher) {
 		q.gapTurn = gapTurn
 	}
 }
 
 func OptGapTime(gapTime time.Duration) CacherOption {
-	return func(q *turnCacher) {
-		q.gapTime = gapTime
+	return func(q *TurnCacher) {
+		q.checkTime = gapTime
 	}
 }
 
 func OptLocker(locker Locker) CacherOption {
-	return func(q *turnCacher) {
+	return func(q *TurnCacher) {
 		q.locker = locker
 	}
 }
 
-func OptRefreshCurrentTurn(f func() (int, error)) CacherOption {
-	return func(tc *turnCacher) {
-		tc.fCurrentTurn = f
+// func OptRefreshCurrentTurn(f func() (int, error)) CacherOption {
+// 	return func(tc *TurnCacher) {
+// 		tc.fCurrentTurn = f
+// 	}
+// }
+
+func OptKeyPrefix(prefix string) CacherOption {
+	return func(tc *TurnCacher) {
+		tc.prefix = prefix
+	}
+}
+
+func OptResetTurnIfNotFound() CacherOption {
+	return func(tc *TurnCacher) {
+		tc.resetIfNotFound = true
 	}
 }
