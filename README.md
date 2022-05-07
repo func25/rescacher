@@ -6,6 +6,7 @@ Contents:
 * [Usecase](#usecase)
 * [Installation](#installation)
 * [How to use](#how-to-use)
+  * [Sample](#sample)
   * [IGen](#igen)
   * [ICacher](#icacher)
   * [Load value from cacher](#load-value-from-cacher)
@@ -22,6 +23,9 @@ Contents:
 `go get github.com/func25/rescacher`
 
 ## How to use 
+
+### Sample
+You can get an sample from `cacher_test.go`, basically it will cache next 50 results into database and retrieve each result in 1 second over time.
 
 ### IGen
 First, we want to know how to generate the result and the current "result id" of the api right now by using an object implement IGen interface:
