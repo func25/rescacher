@@ -1,4 +1,4 @@
-package rsredistest
+package rcredistest
 
 import (
 	"context"

@@ -1,4 +1,4 @@
-package rsredis
+package rcredis
 
 import (
 	"errors"

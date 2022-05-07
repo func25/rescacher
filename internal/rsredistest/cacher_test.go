@@ -1,4 +1,4 @@
-package rsredistest
+package rcredistest
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/func25/rescacher"
-	"github.com/func25/rescacher/rsredis"
+	"github.com/func25/rescacher/rcredis"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -27,7 +27,7 @@ func init() {
 
 	client.FlushAll(context.Background())
 
-	cacher, err = rsredis.NewCacher(client, rsredis.CacherConfig{
+	cacher, err = rcredis.NewCacher(client, rcredis.CacherConfig{
 		Name:       "example",
 		Gennerator: gen,
 	}, rescacher.OptResetTurnIfNotFound())
