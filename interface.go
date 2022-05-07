@@ -13,3 +13,8 @@ type IGen interface {
 	Generate(ctx context.Context, turn int) (interface{}, error) // generate result of turn X (custom)
 	GetCurrentTurn(ctx context.Context) (int, error)             // get current turn (custom)
 }
+
+type Locker interface {
+	Lock() error
+	Unlock() error
+}
