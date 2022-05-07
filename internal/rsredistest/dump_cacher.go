@@ -10,7 +10,7 @@ type Generator struct {
 }
 
 func (*Generator) Generate(ctx context.Context, turn int) (interface{}, error) {
-	return time.Now().Unix(), nil
+	return time.Now().UnixNano(), nil
 }
 
 func (g *Generator) GetCurrentTurn(ctx context.Context) (int, error) {

@@ -31,6 +31,7 @@ func init() {
 		Name:       "example",
 		Gennerator: gen,
 	}, rescacher.OptResetTurnIfNotFound())
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -42,8 +43,12 @@ func TestCacher(t *testing.T) {
 
 	time.Sleep(2 * time.Second)
 	for ; ; gen.CurrentTurn++ {
-		fmt.Println(gen.CurrentTurn)
-		cacher.PopOrGen(ctx, gen.CurrentTurn)
+		res, err := cacher.PopOrGen(ctx, gen.CurrentTurn)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			fmt.Println(gen.CurrentTurn, res)
+		}
 		time.Sleep(time.Second)
 	}
 }
