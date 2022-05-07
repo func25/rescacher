@@ -12,10 +12,10 @@ Contents:
 * [Functions](#functions)
 * [Status](#status-pre-release)
 
-## Usecase
+## Use cases
 
-- The next value being calculated by server may be had errors or failed to calculate, rescacher will retry after an interval.
-- Your users dont have to wait.
+- The next values being calculated by server can be had errors or failed to calculate, rescacher will retry the calculation after an configured interval and cache many predicted results so server can use them gradually.
+- Your users dont have to wait or the event will happen at the right time (no delay).
 
 ## Installation
 
