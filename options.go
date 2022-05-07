@@ -30,12 +30,6 @@ func OptLocker(locker Locker) CacherOption {
 	}
 }
 
-// func OptRefreshCurrentTurn(f func() (int, error)) CacherOption {
-// 	return func(tc *TurnCacher) {
-// 		tc.fCurrentTurn = f
-// 	}
-// }
-
 func OptKeyPrefix(prefix string) CacherOption {
 	return func(tc *TurnCacher) {
 		tc.prefix = prefix
