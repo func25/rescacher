@@ -1,6 +1,6 @@
 # rescacher
 
-The idea is when you have an API and the value of it changes over time (you **should** know what result of api call in specific future time), and you want to cache the results that it will "throw" next.
+The idea is when you have an API and the value of it changes over time, rescacher will cache the next value, next next value,... of it and just throw it out on time with no delay.
 
 Contents:
 * [Usecase](#usecase)
